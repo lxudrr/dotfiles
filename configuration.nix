@@ -99,10 +99,10 @@
   security.sudo.wheelNeedsPassword = false;
 
   # Vbox Configuration 
-  #virtualisation.virtualbox.host.enable = true;
-  #users.extraGroups.vboxusers.members = [ "sasha" ]; # user with access to virtualbox
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
-  #virtualisation.virtualbox.guest.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "sasha" ]; # user with access to virtualbox
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.guest.enable = true;
   #virtualisation.virtualbox.guest.x11 = true;
  
   # Configure keymap in X11
@@ -138,7 +138,7 @@
       htop
       telegram-desktop
       neofetch
-      qemu
+      # qemu
       dbeaver
       pavucontrol
       maxima
@@ -147,7 +147,7 @@
       gcc
       mc
       mlocate
-      #virtualbox
+      virtualbox
       inetutils
     ];
   };
