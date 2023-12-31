@@ -36,47 +36,11 @@
     # useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # Enable the X11 windowing system
-  services.xserver = {
+services.xserver = {
       enable = true;
-      displayManager.gdm = {
-          enable = true;
-          wayland = true;
-      };
-  };
-
-  hardware = {
-      opengl.enable = true;
-  };
-
-  # hyprland
-  programs.hyprland = {
-      enable = true;
-      xwayland.enable = true;
-  };
-
-  environment.systemPackages = [
-  	(pkgs.waybar.overrideAttrs (oldAttrs: {
-  		mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true"];
-  	  })
-  	)
-  	pkgs.dunst
-  	pkgs.libnotify
-  	pkgs.swww
-  	pkgs.kitty
-  	pkgs.rofi-wayland
-  ];
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-  sound.enable = true;
-  security.rtkit.enable = true;
-  services.pipewire = {
-  	enable = true;
-  	alsa.enable = true;
-  	alsa.support32Bit = true;
-  	pulse.enable = true;
-  	jack.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
+      layout = "us";
   };
 
   # Delete useless Gnome Packages
@@ -122,8 +86,9 @@
   # UnFree Software
   nixpkgs.config.allowUnfree = true;
 
+
   # Experimental-Features
-  nix.settings.experimental-features = "nix-command flakes";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Allow Packages
   nixpkgs.config.permittedInsecurePackages = [
@@ -139,7 +104,10 @@
   virtualisation.virtualbox.host.enableExtensionPack = true;
   virtualisation.virtualbox.guest.enable = true;
   #virtualisation.virtualbox.guest.x11 = true;
- 
+
+  # WayDroid
+  virtualisation.waydroid.enable = true;
+   
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
@@ -184,6 +152,10 @@
       mlocate
       virtualbox
       inetutils
+      ciscoPacketTracer8
+	  cowsay
+	  lolcat
+	  smartmontools
     ];
   };
 
