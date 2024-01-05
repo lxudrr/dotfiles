@@ -10,9 +10,16 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    # Use the systemd-boot EFI boot loader.
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      timeout = 1;
+  	};
+
+    kernelPackages = pkgs.linuxPackages_latest; # Get latest linux kernel
+  };
 
   networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -36,7 +43,7 @@
     # useXkbConfig = true; # use xkb.options in tty.
   };
 
-services.xserver = {
+  services.xserver = {
       enable = true;
       displayManager.gdm.enable = true;
       desktopManager.gnome.enable = true;
@@ -76,9 +83,6 @@ services.xserver = {
   ]);
   
   
-  # kernel packages
-  boot.kernelPackages = pkgs.linuxPackages_latest;  
-
   # ZRAM
   zramSwap.enable = true;
   zramSwap.memoryPercent = 25;
@@ -116,8 +120,8 @@ services.xserver = {
   # services.printing.enable = true;
 
   # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -129,7 +133,6 @@ services.xserver = {
     packages = with pkgs; [
       firefox
       tree
-      micro
       kitty
       git
       gnumake
@@ -156,16 +159,16 @@ services.xserver = {
 	  cowsay
 	  lolcat
 	  smartmontools
+	  wireshark-qt
     ];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  #   killall
-  # ];
+  environment.systemPackages = with pkgs; [
+    micro    
+    htop
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
