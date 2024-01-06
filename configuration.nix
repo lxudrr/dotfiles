@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <home-manager/nixos>
     ];
 
   boot = {
@@ -87,27 +88,29 @@
   zramSwap.enable = true;
   zramSwap.memoryPercent = 25;
 
-  # UnFree Software
-  nixpkgs.config.allowUnfree = true;
+
+  nix = {
+  	gc = {
+  		automatic = true;
+  		dates = "weekly";
+  		options = "--delete-older-than 7d";
+  	};
+  };
 
 
   # Experimental-Features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Allow Packages
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
 
   # NoNeedPassword
   security.sudo.wheelNeedsPassword = false;
 
   # Vbox Configuration 
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "sasha" ]; # user with access to virtualbox
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  virtualisation.virtualbox.guest.enable = true;
-  #virtualisation.virtualbox.guest.x11 = true;
+  # virtualisation.virtualbox.host.enable = true;
+  # users.extraGroups.vboxusers.members = [ "sasha" ]; # user with access to virtualbox
+  # virtualisation.virtualbox.host.enableExtensionPack = true;
+  # virtualisation.virtualbox.guest.enable = true;
+  # virtualisation.virtualbox.guest.x11 = true;
 
   # WayDroid
   virtualisation.waydroid.enable = true;
@@ -130,37 +133,6 @@
   users.users.sasha = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      firefox
-      tree
-      kitty
-      git
-      gnumake
-      zsh
-      wl-clipboard
-      obsidian
-      libreoffice
-      discord
-      htop
-      telegram-desktop
-      neofetch
-      qemu
-      dbeaver
-      pavucontrol
-      maxima
-      wxmaxima
-      vscode
-      gcc
-      mc
-      mlocate
-      virtualbox
-      inetutils
-      ciscoPacketTracer8
-	  cowsay
-	  lolcat
-	  smartmontools
-	  wireshark-qt
-    ];
   };
 
   # List packages installed in system profile. To search, run:
@@ -168,6 +140,7 @@
   environment.systemPackages = with pkgs; [
     micro    
     htop
+    inetutils
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -212,5 +185,54 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
 
+
+
+  # Home Manager
+  home-manager.users.sasha = { pkgs, ... }: {
+    home.packages = with pkgs; [
+      firefox
+      tree
+      kitty
+      git
+      gnumake
+      zsh
+      wl-clipboard
+      obsidian
+      libreoffice
+      discord
+      htop
+      telegram-desktop
+      neofetch
+      qemu
+      dbeaver
+      pavucontrol
+      maxima
+      wxmaxima
+      vscode
+      gcc
+      mc
+      mlocate
+      # virtualbox
+      ciscoPacketTracer8
+  	  cowsay
+      lolcat
+      smartmontools
+  	  wireshark-qt
+    ];
+
+
+    # UnFree Software
+    nixpkgs.config.allowUnfree = true;
+    
+    # Allow Packages
+	nixpkgs.config.permittedInsecurePackages = [
+	  "electron-25.9.0"
+	];
+
+    
+    home.stateVersion = config.system.stateVersion;
+  };
+  
 }
+
 
